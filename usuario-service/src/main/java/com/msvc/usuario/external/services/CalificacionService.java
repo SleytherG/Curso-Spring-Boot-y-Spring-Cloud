@@ -15,7 +15,7 @@ public interface CalificacionService {
     Calificacion guardarCalificacion(Calificacion calificacion);
 
     @PutMapping("/calificaciones/{calificacionId}")
-    Calificacion actualizarCalificacion(@PathVariable String calificacionId);
+    Calificacion actualizarCalificacion(@PathVariable String calificacionId, @RequestBody Calificacion calificacion);
 
     @DeleteMapping("/calificaciones/{calificacionId}")
     String eliminarCalificacion(@PathVariable String calificacionId);

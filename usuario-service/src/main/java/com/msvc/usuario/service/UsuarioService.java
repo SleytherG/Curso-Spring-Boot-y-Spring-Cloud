@@ -16,7 +16,7 @@ public interface UsuarioService {
 
     Calificacion guardarCalificacion(Calificacion calificacion);
 
-    Calificacion actualizarCalificacion(String calificacionId);
+    Calificacion actualizarCalificacion(String calificacionId, Calificacion calificacion);
 
     String eliminarCalificacion(String calificacionId);
 

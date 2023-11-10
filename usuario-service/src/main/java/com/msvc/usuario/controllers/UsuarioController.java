@@ -41,12 +41,12 @@ public class UsuarioController {
     }
 
     @PutMapping("/calificaciones/{calificacionId}")
-    public ResponseEntity<Calificacion> actualizarCalificacion(@PathVariable String calificacionId) {
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.actualizarCalificacion(calificacionId));
+    public ResponseEntity<Calificacion> actualizarCalificacion(@PathVariable String calificacionId, @RequestBody Calificacion calificacion) {
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.actualizarCalificacion(calificacionId, calificacion));
     }
 
     @DeleteMapping("/calificaciones/{calificacionId}")
-    public ResponseEntity<String> eliminarCalificacion(@RequestBody String calificacionId) {
+    public ResponseEntity<String> eliminarCalificacion(@PathVariable String calificacionId) {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.eliminarCalificacion(calificacionId));
     }
 

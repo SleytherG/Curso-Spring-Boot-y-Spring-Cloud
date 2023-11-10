@@ -81,8 +81,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Calificacion actualizarCalificacion(String calificacionId) {
-        return calificacionService.actualizarCalificacion(calificacionId);
+    public Calificacion actualizarCalificacion(String calificacionId, Calificacion calificacion) {
+        return calificacionService.actualizarCalificacion(calificacionId, calificacion);
     }
 
     @Override
