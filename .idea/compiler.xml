@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="usuario-service" />
         <module name="api-gateway" />
+        <module name="config-server" />
         <module name="calificacion-service" />
         <module name="registry-service" />
         <module name="hotel-service" />
@@ -19,6 +20,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
       <module name="calificacion-service" options="-parameters" />
+      <module name="config-server" options="-parameters" />
       <module name="hotel-service" options="-parameters" />
       <module name="registry-service" options="-parameters" />
       <module name="usuario-service" options="-parameters" />
