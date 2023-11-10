@@ -4,8 +4,11 @@ import com.msvc.usuario.entities.Calificacion;
 import com.msvc.usuario.entities.Hotel;
 import com.msvc.usuario.entities.Usuario;
 import com.msvc.usuario.exceptions.ResourceNotFoundException;
+import com.msvc.usuario.external.services.CalificacionService;
+import com.msvc.usuario.external.services.HotelService;
 import com.msvc.usuario.repository.UsuarioRepository;
 import com.msvc.usuario.service.UsuarioService;
+import com.netflix.discovery.converters.Auto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private HotelService hotelService;
+
+    @Autowired
+    private CalificacionService calificacionService;
+
     @Override
     public Usuario saveUsuario(Usuario usuario) {
         String randomUsuarioId = UUID.randomUUID().toString();
@@ -47,15 +56,16 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el ID: " + usuarioId));
 
-        Calificacion[] calificacionDelUsuario = restTemplate.getForObject("http://CALIFICACION-SERVICE/calificaciones/usuarios/" + usuario.getUsuarioId(), Calificacion[].class);
-        List<Calificacion> calificaciones = Arrays.stream(calificacionDelUsuario).collect(Collectors.toList());
+//        Calificacion[] calificacionesDelUsuario = restTemplate.getForObject("http://CALIFICACION-SERVICE/calificaciones/usuarios/" + usuario.getUsuarioId(), Calificacion[].class);
+        Calificacion[] calificacionesDelUsuario = calificacionService.obtenerCalificacionesPorUsuario(usuario.getUsuarioId());
+        List<Calificacion> calificaciones = Arrays.stream(calificacionesDelUsuario).collect(Collectors.toList());
 
         List<Calificacion> listaCalificaciones = calificaciones.stream()
                 .map(calificacion -> {
                     System.out.println(calificacion.getHotelId());
-                    ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://HOTEL-SERVICE/hoteles/" + calificacion.getHotelId(), Hotel.class);
-                    Hotel hotel = forEntity.getBody();
-                    logger.info("Respuesta con codigo de estado: {}", forEntity.getStatusCode());
+//                    ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://HOTEL-SERVICE/hoteles/" + calificacion.getHotelId(), Hotel.class);
+                    Hotel hotel = hotelService.getHotel(calificacion.getHotelId());
+//                    logger.info("Respuesta con codigo de estado: {}", forEntity.getStatusCode());
 
                     calificacion.setHotel(hotel);
                     return calificacion;
@@ -63,5 +73,20 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setCalificaciones(listaCalificaciones);
 
         return usuario;
+    }
+
+    @Override
+    public Calificacion guardarCalificacion(Calificacion calificacionRequest) {
+        return calificacionService.guardarCalificacion(calificacionRequest);
+    }
+
+    @Override
+    public Calificacion actualizarCalificacion(String calificacionId) {
+        return calificacionService.actualizarCalificacion(calificacionId);
+    }
+
+    @Override
+    public String eliminarCalificacion(String calificacionId) {
+        return calificacionService.eliminarCalificacion(calificacionId);
     }
 }

@@ -1,5 +1,6 @@
 package com.msvc.usuario.controllers;
 
+import com.msvc.usuario.entities.Calificacion;
 import com.msvc.usuario.entities.Usuario;
 import com.msvc.usuario.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,4 +34,20 @@ public class UsuarioController {
         List<Usuario> usuarios = usuarioService.getAllUsuarios();
         return ResponseEntity.ok(usuarios);
     }
+
+    @PostMapping("/calificaciones/")
+    public ResponseEntity<Calificacion> guardarCalificacion(@RequestBody Calificacion calificacion) {
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.guardarCalificacion(calificacion));
+    }
+
+    @PutMapping("/calificaciones/{calificacionId}")
+    public ResponseEntity<Calificacion> actualizarCalificacion(@PathVariable String calificacionId) {
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.actualizarCalificacion(calificacionId));
+    }
+
+    @DeleteMapping("/calificaciones/{calificacionId}")
+    public ResponseEntity<String> eliminarCalificacion(@RequestBody String calificacionId) {
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.eliminarCalificacion(calificacionId));
+    }
+
 }
